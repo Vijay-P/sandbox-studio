@@ -5,7 +5,7 @@ using UnityEngine;
 public class RaycastShoot : MonoBehaviour {
 
 	private Camera fpsCam;
-	public float fireRate = .1f;
+	public float fireRate = .01f;
 	public float range = 20f;
 	private WaitForSeconds duration = new WaitForSeconds (.07f);
 	public Transform point;
@@ -21,7 +21,8 @@ public class RaycastShoot : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		if (Input.GetButtonDown ("Fire1") && Time.time > nextFire) {
+		//&& Time.time > nextFire
+		if (Input.GetButtonDown ("Fire1") ) {
 			nextFire = Time.time + fireRate;
 			StartCoroutine (ShotEffect());
 			Vector3 rayOrigin = fpsCam.ViewportToWorldPoint(new Vector3(0.5f, 0.5f, 0));

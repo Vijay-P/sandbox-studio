@@ -7,13 +7,28 @@ public class PlaySound : MonoBehaviour {
 
 	AudioSource source;
 	public AudioClip hitSound;
+	public Material active;
+	private Material inactive;
+	private Renderer render;
+
+	private WaitForSeconds duration = new WaitForSeconds (.07f);
 
 	void Start(){
 		source = GetComponent<AudioSource> ();
+		render = GetComponent<Renderer>();
+		render.enabled = true;
+		inactive = render.material;
 	}
 
 	public void strike(){
 		source.PlayOneShot(hitSound, 1f);
+		StartCoroutine (playEffect ());
 		Debug.Log ("Function Called");
+	}
+
+	private IEnumerator playEffect(){
+		render.sharedMaterial = active;
+		yield return duration;
+		render.sharedMaterial = inactive;
 	}
 }
