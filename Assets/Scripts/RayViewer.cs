@@ -5,11 +5,10 @@ using UnityEngine;
 public class RayViewer : MonoBehaviour {
 
 	public float range = 20f;
-	private Camera fpsCam;
+	public Camera fpsCam;
 
 	// Use this for initialization
 	void Start () {
-		fpsCam = GetComponentInParent<Camera> ();
 	}
 	
 	// Update is called once per frame
