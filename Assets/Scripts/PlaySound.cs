@@ -23,7 +23,6 @@ public class PlaySound : MonoBehaviour {
 	public void strike(){
 		source.PlayOneShot(hitSound, 1f);
 		StartCoroutine (playEffect ());
-		Debug.Log ("Function Called");
 	}
 
 	private IEnumerator playEffect(){
