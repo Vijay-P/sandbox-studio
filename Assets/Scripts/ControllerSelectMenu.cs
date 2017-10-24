@@ -5,21 +5,19 @@ using UnityEngine;
 public class ControllerSelectMenu : MonoBehaviour {
 
 	public Material activeMaterial;
+
 	private SteamVR_TrackedObject trackedObj;
 	private GameObject selectedMenuItem; 
+	private Material tmpColor;
+	private string selectedShape;
+	private GameObject objectInHand; 
+	private LineRenderer laserLine;
 
 	private SteamVR_Controller.Device Controller
 	{
 		get { return SteamVR_Controller.Input((int)trackedObj.index); }
 	}
-
-	private int menu_status;
-	private Material tmpColor;
-	private string selectedShape;
-	private GameObject objectInHand; 
-	private LineRenderer laserLine;
- 
-
+		
 	void Awake()
 	{
 		laserLine = GetComponent<LineRenderer> ();
@@ -45,13 +43,15 @@ public class ControllerSelectMenu : MonoBehaviour {
 			}
 
 			if (Controller.GetHairTriggerUp ()) {
-				ReleaseObject ();
+				if (objectInHand != null) {
+					ReleaseObject ();
+				}
 			}
 		}
 
 	}
 
-	void GenerateAndBindShape(){
+	private void GenerateAndBindShape(){
 		switch(selectedShape){
 		case("Cube"):
 			objectInHand = initShape(PrimitiveType.Cube);
@@ -69,10 +69,12 @@ public class ControllerSelectMenu : MonoBehaviour {
 
 	private GameObject initShape(PrimitiveType shapeType){
 		objectInHand = GameObject.CreatePrimitive (shapeType);
-		objectInHand.transform.position = trackedObj.transform.position + trackedObj.transform.forward * 1.0f;
+		objectInHand.layer = LayerMask.NameToLayer ("instruments");
+		objectInHand.transform.position = trackedObj.transform.position + trackedObj.transform.forward * 0.5f;
 		objectInHand.AddComponent<Rigidbody> ();
 		objectInHand.GetComponent<Rigidbody> ().useGravity = false;
 		objectInHand.GetComponent<Rigidbody> ().isKinematic = false;
+		objectInHand.GetComponent<Collider> ().isTrigger = true;
 		objectInHand.AddComponent<PlaySound> ();
 		objectInHand.GetComponent<PlaySound> ().active = activeMaterial;
 		return objectInHand;
@@ -87,7 +89,7 @@ public class ControllerSelectMenu : MonoBehaviour {
 	}
 
 	// On Trigger Methods
-	public void OnTriggerEnter(Collider other)
+	private void OnTriggerEnter(Collider other)
 	{
 		SetCollidingObject(other);
 		Renderer menu = other.gameObject.GetComponentInParent<Renderer> ();
@@ -110,11 +112,11 @@ public class ControllerSelectMenu : MonoBehaviour {
 	}
 		
 
-	public void OnTriggerStay(Collider other){
+	private void OnTriggerStay(Collider other){
 		SetCollidingObject(other);
 	}
 
-	public void OnTriggerExit(Collider other){
+	private void OnTriggerExit(Collider other){
 		if (other.gameObject.layer == LayerMask.NameToLayer ("menu_item")) {
 			other.gameObject.GetComponentInParent<Renderer> ().material = tmpColor;
 			selectedShape = "";

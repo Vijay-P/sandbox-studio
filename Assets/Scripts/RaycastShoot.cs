@@ -13,15 +13,11 @@ public class RaycastShoot : MonoBehaviour {
 	{
 		get {return SteamVR_Controller.Input ((int)trackedObj.index);}
 	}
-
-	void Start(){
-		laserLine.enabled = false;
-	}
-
+		
 	void Awake(){
 		trackedObj = GetComponent<SteamVR_TrackedObject> ();
 		laserLine = GetComponent<LineRenderer> ();
-		laserLine.enabled = true;
+		laserLine.enabled = false;
 	}
 
 	// Update is called once per frame
@@ -31,7 +27,7 @@ public class RaycastShoot : MonoBehaviour {
 
 		laserLine.SetPosition (0, point.position);
 
-		if (Physics.Raycast (rayOrigin, point.forward, out hit, range)) {
+		if (laserLine.enabled && Physics.Raycast (rayOrigin, point.forward, out hit, range)) {
 			laserLine.SetPosition (1, hit.point);
 			PlaySound box = hit.collider.GetComponent<PlaySound> ();
 			if(box != null && Controller.GetHairTriggerDown()){
