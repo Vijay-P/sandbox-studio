@@ -17,9 +17,12 @@ public class ControllerSelectMenu : MonoBehaviour {
 	private Material tmpColor;
 	private string selectedShape;
 	private GameObject objectInHand; 
+	private LineRenderer laserLine;
+ 
 
 	void Awake()
 	{
+		laserLine = GetComponent<LineRenderer> ();
 		trackedObj = GetComponent<SteamVR_TrackedObject>();
 	}
 
@@ -32,15 +35,18 @@ public class ControllerSelectMenu : MonoBehaviour {
 
 	// Update is called once per frame
 	void Update () {
-		if (Controller.GetHairTriggerDown ()) {
-			if (selectedShape != "") {
-				GenerateAndBindShape ();
-				selectedShape = "";
-			}
-		}
 
-		if (Controller.GetHairTriggerUp ()) {
-			ReleaseObject ();
+		if (!laserLine.enabled) {
+			if (Controller.GetHairTriggerDown ()) {
+				if (selectedShape != "") {
+					GenerateAndBindShape ();
+					selectedShape = "";
+				}
+			}
+
+			if (Controller.GetHairTriggerUp ()) {
+				ReleaseObject ();
+			}
 		}
 
 	}
@@ -67,18 +73,18 @@ public class ControllerSelectMenu : MonoBehaviour {
 		objectInHand.AddComponent<Rigidbody> ();
 		objectInHand.GetComponent<Rigidbody> ().useGravity = false;
 		objectInHand.GetComponent<Rigidbody> ().isKinematic = false;
+		objectInHand.AddComponent<PlaySound> ();
+		objectInHand.GetComponent<PlaySound> ().active = activeMaterial;
 		return objectInHand;
 	}
 
 	private void ReleaseObject(){
 		if (objectInHand.GetComponent<FixedJoint>() != null){
-			Debug.Log ("joint does not exist");
 			objectInHand.GetComponent<FixedJoint>().connectedBody = null;
 			Destroy (objectInHand.GetComponent<FixedJoint> ());
 			objectInHand.transform.parent = null;
 			objectInHand = null;
 		}
-		Debug.Log ("Inside Rel o");
 	}
 
 	// On Trigger Methods

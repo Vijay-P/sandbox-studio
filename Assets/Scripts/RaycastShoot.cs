@@ -40,6 +40,11 @@ public class RaycastShoot : MonoBehaviour {
 		} else {
 			laserLine.SetPosition (1, rayOrigin + (point.forward * range));
 		}
+
+		if (Controller.GetPressDown (SteamVR_Controller.ButtonMask.Grip)) {
+			Debug.Log ("Grip Pressed");
+			laserLine.enabled = !laserLine.enabled;
+		}
 		
 	}
 }
