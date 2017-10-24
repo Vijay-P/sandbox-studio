@@ -14,6 +14,10 @@ public class RaycastShoot : MonoBehaviour {
 		get {return SteamVR_Controller.Input ((int)trackedObj.index);}
 	}
 
+	void Start(){
+		laserLine.enabled = false;
+	}
+
 	void Awake(){
 		trackedObj = GetComponent<SteamVR_TrackedObject> ();
 		laserLine = GetComponent<LineRenderer> ();
