@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class ControllerSelectMenu : MonoBehaviour {
 
-
+	public Material activeMaterial;
 	private SteamVR_TrackedObject trackedObj;
 	private GameObject selectedMenuItem; 
 
@@ -14,123 +14,106 @@ public class ControllerSelectMenu : MonoBehaviour {
 	}
 
 	private int menu_status;
-	private Color tmpColor;
+	private Material tmpColor;
 	private string selectedShape;
-	private string objectInHand; 
-
-	void Start()
-	{
-		objectInHand = "";
-		selectedShape = "";
-	}
-		
+	private GameObject objectInHand; 
 
 	void Awake()
 	{
 		trackedObj = GetComponent<SteamVR_TrackedObject>();
 	}
 
-	private void SetCollidingObject(Collider col)
+
+	void Start()
 	{
-		if (selectedMenuItem || !col.GetComponent<Rigidbody>())
-		{
-			return;
-		}
-		selectedMenuItem = col.gameObject;
-	}
-
-
-
-	// On Trigger Methods
-	public void OnTriggerEnter(Collider other)
-	{
-		SetCollidingObject(other);
-		tmpColor = other.gameObject.GetComponentInParent<Renderer> ().material.color;
-		other.gameObject.GetComponentInParent<Renderer> ().material.color = new Color (0, 255, 0);
-		selectedShape = other.gameObject.GetComponentInChildren<TextMesh> ().text;
-		Debug.Log ("Touching Shape = " + selectedShape);
-	}
-
-	public void OnTriggerStay(Collider other)
-	{
-		SetCollidingObject(other);
-	}
-
-	public void OnTriggerExit(Collider other)
-	{
-
-		other.gameObject.GetComponentInParent<Renderer> ().material.color = tmpColor;
+		objectInHand = null;
 		selectedShape = "";
 	}
 
-	// Select Menu Item and Add Joint
-	private void SelectMenuItem()
-	{
-		//objectInHand = selectedMenuItem;
-		//selectedMenuItem = null;
-
-		//var joint = AddFixedJoint ();
-		//joint.connectedBody = objectInHand.GetComponent<Rigidbody> ();
-	}
-
-	private FixedJoint AddFixedJoint()
-	{
-		FixedJoint fx = gameObject.AddComponent<FixedJoint> ();
-		fx.breakForce = 20000;
-		fx.breakTorque = 20000;
-		return fx;
-	}
-
-	private void ReleaseObject(){
-		if (GetComponent<FixedJoint>()){
-			GetComponent<FixedJoint>().connectedBody = null;
-			Destroy (GetComponent<FixedJoint> ());
-		}
-		objectInHand = "";
-	}
-
-	private GameObject GenerateShape(){
-		GameObject shape = null;
-		if (selectedShape == "Cube") {
-			shape = GameObject.CreatePrimitive (PrimitiveType.Cube);
-			shape.transform.position = trackedObj.transform.position;
-			Vector3 scale_vec = new Vector3 (.1, .1, .1);
-			shape.transform.localScale.Scale(scale_vec);
-		} else if (selectedShape == "Sphere") {
-			shape = GameObject.CreatePrimitive (PrimitiveType.Sphere);
-			shape.transform.position = trackedObj.transform.position;
-		} else if (selectedShape == "Pyramid") {
-			shape = GameObject.CreatePrimitive (PrimitiveType.Capsule);
-			shape.transform.position = trackedObj.transform.position;
-		} else {
-			return shape;
-		}
-		shape.AddComponent<Rigidbody> ();
-		return shape;
-	}
-
-	private void BindShape(GameObject shape){
-		var joint = AddFixedJoint ();
-		joint.connectedBody = shape.GetComponent<Rigidbody> ();
-	}
-	
 	// Update is called once per frame
 	void Update () {
-
 		if (Controller.GetHairTriggerDown ()) {
 			if (selectedShape != "") {
-				GameObject musical_shape = GenerateShape ();
-				BindShape (musical_shape);
-				objectInHand = selectedShape;
+				GenerateAndBindShape ();
 				selectedShape = "";
 			}
 		}
 
 		if (Controller.GetHairTriggerUp ()) {
-			if (objectInHand != "") {
-				ReleaseObject ();
+			ReleaseObject ();
+		}
+
+	}
+
+	void GenerateAndBindShape(){
+		switch(selectedShape){
+		case("Cube"):
+			objectInHand = initShape(PrimitiveType.Cube);
+			break;
+		case("Sphere"):
+			objectInHand = initShape(PrimitiveType.Sphere);
+			break;
+		case("Pyramid"):
+			objectInHand = initShape(PrimitiveType.Capsule);
+			break;	
+		}
+		objectInHand.AddComponent<FixedJoint>();
+		objectInHand.GetComponent<FixedJoint>().connectedBody = trackedObj.GetComponent<Rigidbody>();
+	}
+
+	private GameObject initShape(PrimitiveType shapeType){
+		objectInHand = GameObject.CreatePrimitive (shapeType);
+		objectInHand.transform.position = trackedObj.transform.position + trackedObj.transform.forward * 1.0f;
+		objectInHand.AddComponent<Rigidbody> ();
+		objectInHand.GetComponent<Rigidbody> ().useGravity = false;
+		objectInHand.GetComponent<Rigidbody> ().isKinematic = false;
+		return objectInHand;
+	}
+
+	private void ReleaseObject(){
+		if (objectInHand.GetComponent<FixedJoint>() != null){
+			Debug.Log ("joint does not exist");
+			objectInHand.GetComponent<FixedJoint>().connectedBody = null;
+			Destroy (objectInHand.GetComponent<FixedJoint> ());
+			objectInHand.transform.parent = null;
+			objectInHand = null;
+		}
+		Debug.Log ("Inside Rel o");
+	}
+
+	// On Trigger Methods
+	public void OnTriggerEnter(Collider other)
+	{
+		SetCollidingObject(other);
+		Renderer menu = other.gameObject.GetComponentInParent<Renderer> ();
+		if (other.gameObject.layer == LayerMask.NameToLayer("menu_item")) {
+			tmpColor = menu.material;
+			menu.material = activeMaterial;
+			TextMesh shapeComponent = other.gameObject.GetComponentInChildren<TextMesh> ();
+			if (shapeComponent != null) {
+				selectedShape = shapeComponent.text;
+				Debug.Log ("Touching Shape = " + selectedShape);
 			}
 		}
-		
 	}
+
+	private void SetCollidingObject(Collider col){
+		if (selectedMenuItem || !col.GetComponent<Rigidbody>()){
+			return;
+		}
+		selectedMenuItem = col.gameObject;
+	}
+		
+
+	public void OnTriggerStay(Collider other){
+		SetCollidingObject(other);
+	}
+
+	public void OnTriggerExit(Collider other){
+		if (other.gameObject.layer == LayerMask.NameToLayer ("menu_item")) {
+			other.gameObject.GetComponentInParent<Renderer> ().material = tmpColor;
+			selectedShape = "";
+		}
+	}
+		
 }
