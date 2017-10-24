@@ -82,7 +82,6 @@ public class ControllerSelectMenu : MonoBehaviour {
 		if (objectInHand.GetComponent<FixedJoint>() != null){
 			objectInHand.GetComponent<FixedJoint>().connectedBody = null;
 			Destroy (objectInHand.GetComponent<FixedJoint> ());
-			objectInHand.transform.parent = null;
 			objectInHand = null;
 		}
 	}
