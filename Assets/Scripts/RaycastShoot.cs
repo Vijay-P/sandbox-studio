@@ -6,6 +6,8 @@ public class RaycastShoot : MonoBehaviour {
 
 	public float range = 20f;
 	public Transform point;
+	public Stolen_Teleporter teleporter;
+	public Stolen_Laser tpointer;
 	private LineRenderer laserLine;
 	private PlaySound last;
 	private SteamVR_TrackedObject trackedObj;
@@ -41,7 +43,10 @@ public class RaycastShoot : MonoBehaviour {
 		if (Controller.GetPressDown (SteamVR_Controller.ButtonMask.Grip)) {
 			Debug.Log ("Grip Pressed");
 			laserLine.enabled = !laserLine.enabled;
+			if (tpointer != null && teleporter != null) {
+				teleporter.enabled = !teleporter.enabled;
+				tpointer.enabled = !tpointer.enabled;
+			}
 		}
-		
 	}
 }

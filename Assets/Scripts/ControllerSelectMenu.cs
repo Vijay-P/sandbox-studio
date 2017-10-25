@@ -93,6 +93,7 @@ public class ControllerSelectMenu : MonoBehaviour {
 			PlaySound myshape = applyShape.GetComponent<PlaySound> ();
 			myshape.hitSound = selection;
 			myshape.GetComponent<Renderer> ().material = soundMaterial;
+			myshape.inactive = soundMaterial;
 		}
 		applyShape = null;
 		selection = null;
