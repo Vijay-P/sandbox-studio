@@ -17,7 +17,6 @@ public class PlaySound : MonoBehaviour {
 		source = GetComponent<AudioSource> ();
 		render = GetComponent<Renderer>();
 		render.enabled = true;
-		inactive = render.material;
 	}
 
 	public void strike(){
@@ -26,6 +25,7 @@ public class PlaySound : MonoBehaviour {
 	}
 
 	private IEnumerator playEffect(){
+		inactive = render.material;
 		render.sharedMaterial = active;
 		yield return duration;
 		render.sharedMaterial = inactive;

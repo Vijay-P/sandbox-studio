@@ -32,6 +32,7 @@ public class RaycastShoot : MonoBehaviour {
 			PlaySound box = hit.collider.GetComponent<PlaySound> ();
 			if(box != null && Controller.GetHairTriggerDown()){
 				box.strike ();
+				Controller.TriggerHapticPulse (3500);
 			}
 		} else {
 			laserLine.SetPosition (1, rayOrigin + (point.forward * range));
