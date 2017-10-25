@@ -15,10 +15,10 @@ TagManager:
   - UI
   - 
   - 
-  - menu_item
+  - menu_item_shape
   - instruments
-  - 
-  - 
+  - menu_item_soundType
+  - menu_item_sound
   - 
   - 
   - 
