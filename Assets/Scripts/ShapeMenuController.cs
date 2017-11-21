@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class ShapeMenuController : MonoBehaviour {
 
-	public GameObject menu;
+	public GameObject shape_menu;
 	private SteamVR_TrackedObject trackedObj;
 	private SteamVR_Controller.Device Controller
 	{
@@ -22,7 +22,7 @@ public class ShapeMenuController : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		menu.SetActive (false);
+		shape_menu.SetActive (false);
 		trackedObj = GetComponent<SteamVR_TrackedObject> ();
 		
 	}
@@ -33,7 +33,7 @@ public class ShapeMenuController : MonoBehaviour {
 		if (Controller.GetPressDown (SteamVR_Controller.ButtonMask.Touchpad)) {
 			Debug.Log (Controller.GetAxis ().x + " , " + Controller.GetAxis ().y);
 			if (Controller.GetAxis ().y > .7) {
-				menu.SetActive (!menu.activeSelf);
+				shape_menu.SetActive (!shape_menu.activeSelf);
 			}
 		}
 		

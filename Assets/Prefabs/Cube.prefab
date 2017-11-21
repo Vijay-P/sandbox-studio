@@ -162,7 +162,7 @@ AudioSource:
       tangentMode: 0
     m_PreInfinity: 2
     m_PostInfinity: 2
-    m_RotationOrder: 4
+    m_RotationOrder: 0
   reverbZoneMixCustomCurve:
     serializedVersion: 2
     m_Curve:
@@ -188,3 +188,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   hitSound: {fileID: 8300000, guid: ceede1a068e36084bb5b6cf7f6d2febd, type: 3}
   active: {fileID: 2100000, guid: 0a3838b3d235bfc4d9c0b124d4fe6410, type: 2}
+  inactive: {fileID: 0}
