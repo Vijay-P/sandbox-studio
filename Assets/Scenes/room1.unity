@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.094381645, g: 0.08481714, b: 0.05170414, a: 1}
+  m_IndirectSpecularColor: {r: 0.09677556, g: 0.08798124, b: 0.059274577, a: 1}
 --- !u!157 &3
 LightmapSettings:
   m_ObjectHideFlags: 0
@@ -108,39 +108,6 @@ NavMeshSettings:
     tileSize: 256
     accuratePlacement: 0
   m_NavMeshData: {fileID: 0}
---- !u!21 &220650003
-Material:
-  serializedVersion: 6
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_Name: Sprites/Default
-  m_Shader: {fileID: 10753, guid: 0000000000000000f000000000000000, type: 0}
-  m_ShaderKeywords: 
-  m_LightmapFlags: 4
-  m_EnableInstancingVariants: 0
-  m_DoubleSidedGI: 0
-  m_CustomRenderQueue: -1
-  stringTagMap: {}
-  disabledShaderPasses: []
-  m_SavedProperties:
-    serializedVersion: 3
-    m_TexEnvs:
-    - _AlphaTex:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - _MainTex:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    m_Floats:
-    - PixelSnap: 0
-    - _EnableExternalAlpha: 0
-    m_Colors:
-    - _Color: {r: 1, g: 1, b: 1, a: 1}
-    - _Flip: {r: 1, g: 1, b: 1, a: 1}
-    - _RendererColor: {r: 1, g: 1, b: 1, a: 1}
 --- !u!1 &282226442
 GameObject:
   m_ObjectHideFlags: 0
@@ -206,6 +173,39 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
+--- !u!21 &288488946
+Material:
+  serializedVersion: 6
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_Name: Sprites/Default
+  m_Shader: {fileID: 10753, guid: 0000000000000000f000000000000000, type: 0}
+  m_ShaderKeywords: 
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - _AlphaTex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _MainTex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Floats:
+    - PixelSnap: 0
+    - _EnableExternalAlpha: 0
+    m_Colors:
+    - _Color: {r: 1, g: 1, b: 1, a: 1}
+    - _Flip: {r: 1, g: 1, b: 1, a: 1}
+    - _RendererColor: {r: 1, g: 1, b: 1, a: 1}
 --- !u!1001 &295526535
 Prefab:
   m_ObjectHideFlags: 0
@@ -328,7 +328,7 @@ Prefab:
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: ca5d5c82c71efc44b9a47b7463013511, type: 2}
   m_IsPrefabParent: 0
---- !u!43 &444976241
+--- !u!43 &468471069
 Mesh:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
@@ -655,6 +655,9 @@ MonoBehaviour:
   shapeMenu: {fileID: 854400626}
   soundMenu: {fileID: 1542864965}
   orb: {fileID: 1033196423}
+  natureSubMenu: {fileID: 1511100392001704, guid: 8f8e6d86d252afb44b70cd6a66a305f7,
+    type: 2}
+  natureSoundMaterial: {fileID: 2100000, guid: d90dac91ae9d3bb44910bcd081ea430d, type: 2}
 --- !u!114 &992610057
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -668,7 +671,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   shapeMenu: {fileID: 854400626}
   soundMenu: {fileID: 1542864965}
-  act: 0
+  grabbed: 0
   grab: {fileID: 0}
 --- !u!114 &992610058
 MonoBehaviour:
@@ -974,6 +977,12 @@ Prefab:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 114715663359735720, guid: ca5d5c82c71efc44b9a47b7463013511,
+        type: 2}
+      propertyPath: child_object
+      value: 
+      objectReference: {fileID: 1268500698123082, guid: cff605b028650ca4ab084f4098464918,
+        type: 2}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: ca5d5c82c71efc44b9a47b7463013511, type: 2}
   m_IsPrefabParent: 0
@@ -1080,6 +1089,58 @@ Prefab:
         type: 2}
       propertyPath: InitialModule.startSize.scalar
       value: 2.4
+      objectReference: {fileID: 0}
+    - target: {fileID: 4378855477022198, guid: a642eecb599177046ab8d7958edf46c9, type: 2}
+      propertyPath: m_LocalScale.x
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 4378855477022198, guid: a642eecb599177046ab8d7958edf46c9, type: 2}
+      propertyPath: m_LocalScale.y
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 4378855477022198, guid: a642eecb599177046ab8d7958edf46c9, type: 2}
+      propertyPath: m_LocalScale.z
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 4686705091634158, guid: a642eecb599177046ab8d7958edf46c9, type: 2}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4686705091634158, guid: a642eecb599177046ab8d7958edf46c9, type: 2}
+      propertyPath: m_LocalScale.x
+      value: 0.05
+      objectReference: {fileID: 0}
+    - target: {fileID: 4686705091634158, guid: a642eecb599177046ab8d7958edf46c9, type: 2}
+      propertyPath: m_LocalScale.y
+      value: 0.05
+      objectReference: {fileID: 0}
+    - target: {fileID: 4686705091634158, guid: a642eecb599177046ab8d7958edf46c9, type: 2}
+      propertyPath: m_LocalScale.z
+      value: 0.05
+      objectReference: {fileID: 0}
+    - target: {fileID: 4250300987243876, guid: a642eecb599177046ab8d7958edf46c9, type: 2}
+      propertyPath: m_LocalScale.x
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4250300987243876, guid: a642eecb599177046ab8d7958edf46c9, type: 2}
+      propertyPath: m_LocalScale.y
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4250300987243876, guid: a642eecb599177046ab8d7958edf46c9, type: 2}
+      propertyPath: m_LocalScale.z
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4326964100290806, guid: a642eecb599177046ab8d7958edf46c9, type: 2}
+      propertyPath: m_LocalScale.x
+      value: 0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4326964100290806, guid: a642eecb599177046ab8d7958edf46c9, type: 2}
+      propertyPath: m_LocalScale.y
+      value: 0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4326964100290806, guid: a642eecb599177046ab8d7958edf46c9, type: 2}
+      propertyPath: m_LocalScale.z
+      value: 0.1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: a642eecb599177046ab8d7958edf46c9, type: 2}
@@ -1245,6 +1306,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d82a339b76f1abd4db4b1c782e906497, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  sound_menu: {fileID: 1542864965}
   shape_menu: {fileID: 854400626}
 --- !u!114 &1992765602
 MonoBehaviour:
@@ -1275,6 +1337,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 74b98a78f0e488342bb56ae7d58b7d53, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  shape_menu: {fileID: 854400626}
   sound_menu: {fileID: 1542864965}
 --- !u!114 &1992765604
 MonoBehaviour:
@@ -1336,11 +1399,11 @@ Prefab:
     - target: {fileID: 2348914, guid: 4d293c8e162f3874b982baadd71153d2, type: 2}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: 220650003}
+      objectReference: {fileID: 288488946}
     - target: {fileID: 3380982, guid: 4d293c8e162f3874b982baadd71153d2, type: 2}
       propertyPath: m_Mesh
       value: 
-      objectReference: {fileID: 444976241}
+      objectReference: {fileID: 468471069}
     - target: {fileID: 478542, guid: 4d293c8e162f3874b982baadd71153d2, type: 2}
       propertyPath: m_RootOrder
       value: 0

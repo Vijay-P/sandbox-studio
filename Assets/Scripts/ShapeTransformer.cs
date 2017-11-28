@@ -9,7 +9,7 @@ public class ShapeTransformer : MonoBehaviour {
 	private SteamVR_TrackedObject trackedObj;
 	private LineRenderer laserLine;
 	private bool enableTransform;
-	public bool act;
+	public bool grabbed;
 	public GameObject grab;
 	private SteamVR_Controller.Device Controller
 	{
@@ -26,6 +26,7 @@ public class ShapeTransformer : MonoBehaviour {
 	void Start () {
 		enableTransform = false;
 		grab = null;
+		grabbed = false;
 	}
 	
 	// Update is called once per frame
@@ -37,12 +38,23 @@ public class ShapeTransformer : MonoBehaviour {
 		}
 		if (Controller.GetHairTriggerDown ()) {
 			if (grab != null) {
+				grabbed = true;
 				linkObject (grab);
 			}
 		}
 		if (Controller.GetHairTriggerUp ()) {
 			if (grab != null) {
+				grabbed = false;
 				releaseObject (grab);
+			}
+		}
+
+		// Delete objects by flicking controller up
+		if (Mathf.Abs(Controller.velocity.y) > 1.5) {
+			Vector3 vel = Controller.velocity;
+			Debug.Log ("vel x = " + vel.x + "vel y = " + vel.y + "vel z = " + vel.z);
+			if (grab != null && grabbed != true) {
+				Destroy (grab);
 			}
 		}
 	}

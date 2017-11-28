@@ -5,6 +5,7 @@ using UnityEngine;
 public class SoundContainer : MonoBehaviour {
 
 	public AudioClip sound;
+	public Material material;
 
 	// Use this for initialization
 	void Start () {

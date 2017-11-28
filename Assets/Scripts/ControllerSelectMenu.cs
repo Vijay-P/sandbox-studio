@@ -10,20 +10,25 @@ public class ControllerSelectMenu : MonoBehaviour {
 	public GameObject soundMenu;
 	public GameObject orb;
 
+	public GameObject natureSubMenu;
+	public Material natureSoundMaterial;
+
 	private SteamVR_TrackedObject trackedObj;
 	private GameObject selectedMenuItem; 
 	private string selectedShape;
 	private GameObject selectedSoundType;
+	private GameObject selectedShapeType;
 	private string selectedSoundNote;
 	private GameObject objectInHand; 
 	private LineRenderer laserLine;
-	private string active_menu;
 	private GameObject submenu;
 	private GameObject selectedSound;
 	private AudioClip selection;
 	private GameObject applyShape;
 	private GameObject activeSoundType;
 	private Material soundMaterial;
+
+	//private 
 
 	private SteamVR_Controller.Device Controller
 	{
@@ -50,6 +55,8 @@ public class ControllerSelectMenu : MonoBehaviour {
 		applyShape = null;
 		activeSoundType = null;
 		soundMaterial = null;
+		selectedMenuItem = null;
+		selectedShapeType = null;
 	}
 
 	// Update is called once per frame
@@ -114,6 +121,7 @@ public class ControllerSelectMenu : MonoBehaviour {
 
 	private void PickSound(){
 		SoundContainer container = selectedSound.GetComponent<SoundContainer> ();
+		soundMaterial = container.material;
 		if (container != null) {
 			selection = container.sound;
 			orb.SetActive (true);
@@ -135,10 +143,19 @@ public class ControllerSelectMenu : MonoBehaviour {
 		if (!selectedSoundType.Equals (activeSoundType)) {
 			activeSoundType = selectedSoundType;
 			selectedSoundType.GetComponent<Renderer> ().material = activeMaterial;
-			ObjectContainer container = selectedSoundType.GetComponent<ObjectContainer> ();
-			if (container != null) {
-				soundMaterial = container.soundMaterial;
-				submenu = Instantiate (container.child_object, soundMenu.transform.position + soundMenu.transform.right * .35f, soundMenu.transform.rotation, soundMenu.transform) as GameObject;
+
+			TextMesh sound_type = selectedSoundType.transform.GetChild (0).GetComponent<TextMesh>();
+			Debug.Log ("Sound Selected = " + sound_type.text);
+
+			if (sound_type.text.Equals("Nature")) {
+				soundMaterial = natureSoundMaterial;
+				submenu = Instantiate (natureSubMenu, soundMenu.transform.position + soundMenu.transform.right * .35f, soundMenu.transform.rotation, soundMenu.transform) as GameObject;
+			} else {
+				ObjectContainer container = selectedSoundType.GetComponent<ObjectContainer> ();
+				if (container != null) {
+					soundMaterial = container.soundMaterial;
+					submenu = Instantiate (container.child_object, soundMenu.transform.position + soundMenu.transform.right * .35f, soundMenu.transform.rotation, soundMenu.transform) as GameObject;
+				}
 			}
 		} else {
 			activeSoundType = null;
@@ -164,15 +181,23 @@ public class ControllerSelectMenu : MonoBehaviour {
 
 	// Generate the new shape and bind to controller
 	private void GenerateAndBindShape(){
+		Debug.Log (selectedShape);
 		switch(selectedShape){
 		case("Cube"):
-			objectInHand = initShape(PrimitiveType.Cube);
+			objectInHand = GameObject.CreatePrimitive (PrimitiveType.Cube);
+			initShape ();
+			objectInHand.transform.localScale = new Vector3 (0.5f, 0.5f, 0.5f);
 			break;
 		case("Sphere"):
-			objectInHand = initShape(PrimitiveType.Sphere);
+			objectInHand = GameObject.CreatePrimitive (PrimitiveType.Sphere);
+			initShape();
+			objectInHand.transform.localScale = new Vector3 (0.5f, 0.5f, 0.5f);
 			break;
 		case("Pyramid"):
-			objectInHand = initShape(PrimitiveType.Capsule);
+			ObjectContainer container = selectedShapeType.GetComponent<ObjectContainer> ();
+			objectInHand = Instantiate (container.child_object) as GameObject;
+			initShape ();
+			objectInHand.transform.localScale = new Vector3 (30.0f, 30.0f, 30.0f);
 			break;	
 		}
 		objectInHand.AddComponent<FixedJoint>();
@@ -180,8 +205,7 @@ public class ControllerSelectMenu : MonoBehaviour {
 	}
 
 	// initialize the shape
-	private GameObject initShape(PrimitiveType shapeType){
-		objectInHand = GameObject.CreatePrimitive (shapeType);
+	private void initShape(){
 		objectInHand.layer = LayerMask.NameToLayer ("instruments");
 		objectInHand.transform.position = trackedObj.transform.position + trackedObj.transform.forward * 0.5f;
 		objectInHand.AddComponent<Rigidbody> ();
@@ -190,7 +214,6 @@ public class ControllerSelectMenu : MonoBehaviour {
 		objectInHand.GetComponent<Collider> ().isTrigger = true;
 		objectInHand.AddComponent<PlaySound> ();
 		objectInHand.GetComponent<PlaySound> ().active = activeMaterial;
-		return objectInHand;
 	}
 
 	// Release the object
@@ -208,6 +231,7 @@ public class ControllerSelectMenu : MonoBehaviour {
 		SetCollidingObject(other);
 		Renderer menu = other.gameObject.GetComponentInParent<Renderer> ();
 		if (other.gameObject.layer == LayerMask.NameToLayer ("menu_item_shape")) {
+			selectedShapeType = other.gameObject;
 			menu.material = activeMaterial;
 			TextMesh shapeComponent = other.gameObject.GetComponentInChildren<TextMesh> ();
 			if (shapeComponent != null) {
@@ -241,6 +265,7 @@ public class ControllerSelectMenu : MonoBehaviour {
 		if (other.gameObject.layer == LayerMask.NameToLayer ("menu_item_shape")) {
 			other.gameObject.GetComponentInParent<Renderer> ().material = inactiveMaterial;
 			selectedShape = "";
+			selectedShapeType = null;
 		} else if (other.gameObject.layer == LayerMask.NameToLayer ("menu_item_soundType")) {
 			other.gameObject.GetComponentInParent<Renderer> ().material = inactiveMaterial;
 			selectedSoundType = null;
