@@ -39,7 +39,7 @@ public class RaycastShoot : MonoBehaviour {
 				Controller.TriggerHapticPulse (3500);
 				last = box;
 			} else if(box == null) {
-				last = null;
+				last = null; 	
 			}
 		} else {
 			laserLine.SetPosition (1, rayOrigin + (point.forward * range));
