@@ -15,6 +15,9 @@ public class PlaySound : MonoBehaviour {
 
 	void Start(){
 		source = GetComponent<AudioSource> ();
+		source.spatialize = true;
+		source.spatialBlend = 1.0f;
+		source.rolloffMode = AudioRolloffMode.Custom;
 		render = GetComponent<Renderer>();
 		render.enabled = true;
 		inactive = render.material;

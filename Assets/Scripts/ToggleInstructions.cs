@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class ToggleInstructions : MonoBehaviour {
 
-	public GameObject instructions;
+	public GameObject instructions_right;
+	public GameObject instructions_left;
 
 	private SteamVR_TrackedObject trackedObj;
 	private SteamVR_Controller.Device Controller
@@ -16,7 +17,8 @@ public class ToggleInstructions : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		instr_status = true;
-		instructions.SetActive (instr_status);
+		instructions_right.SetActive (instr_status);
+		instructions_left.SetActive (instr_status);
 		trackedObj = GetComponent<SteamVR_TrackedObject> ();
 	}
 	
@@ -25,7 +27,8 @@ public class ToggleInstructions : MonoBehaviour {
 
 		if (Controller.GetPressDown (SteamVR_Controller.ButtonMask.Touchpad)) {
 			instr_status = !instr_status;
-			instructions.SetActive (instr_status);
+			instructions_right.SetActive (instr_status);
+			instructions_left.SetActive (instr_status);
 		}
 		
 	}
